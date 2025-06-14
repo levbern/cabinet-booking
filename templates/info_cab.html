@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<!-- Main Content -->
+<main class="container my-5 pt-5 form-section">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 mb-5">
+            <div class="mb-4">
+                <form method="POST" style="display: inline;">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <select class="form-control form-control-lg" id="cab_num" name="cab_num" required>
+                                <option value="" disabled selected>Выберите кабинет</option>
+                                <option value="20">Кабинет 20</option>
+                                {% for num in range(22,32) %}
+                                <option value="{{ num }}">Кабинет {{ num }}</option>
+                                {% endfor %}
+                                {% for num in range(33,38) %}
+                                <option value="{{ num }}">Кабинет {{ num }}</option>
+                                {% endfor %}
+                                {% for num in range(40,42) %}
+                                <option value="{{ num }}">Кабинет {{ num }}</option>
+                                {% endfor %}
+                                {% for num in range(44,50) %}
+                                <option value="{{ num }}">Кабинет {{ num }}</option>
+                                {% endfor %}
+                                {% for num in range(50,55) %}
+                                <option value="{{ num }}">Кабинет {{ num }}</option>
+                                {% endfor %}
+                                {% for num in range(309,315) %}
+                                <option value="{{ num }}">Кабинет {{ num }}</option>
+                                {% endfor %}
+                                {% for num in range(410,412) %}
+                                <option value="{{ num }}">Кабинет {{ num }}</option>
+                                {% endfor %}
+                                {% for num in range(412,415) %}
+                                <option value="{{ num }}">Кабинет {{ num }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-lg-3">
+                            <button style="border-radius: 10px; margin-bottom: 5px;" class="btn-purple" type="submit">
+                                Выбрать
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {% if cab == 0 %}
+                <h3>Нужно выбрать кабинет</h3>
+            {% elif cab['find'] == -1 %}
+                <h3>Информации о кабинете {{cab['cabinet']}} нет</h3>
+            {% else %}
+                <h3>Информация о кабинете {{cab['cabinet']}}</h3>
+                <p class="lead">Здание: {% if cab['building'] == "old" %} Старое {% else %} Новое {% endif %}</p>
+                <p class="lead">Этаж: {{cab['floor']}}</p>
+                <p class="lead">Компьютерный класс: {% if cab['is_computer_class'] == true %} Да {% else %} нет {% endif %}</p>
+                <p class="lead">Электронная доска: {% if cab['has_electronic_desk'] == true %} Есть {% else %} Нет {% endif %}</p>
+                <p class="lead">Проектор: {% if cab['has_projector'] == true %} Есть {% else %} Нет {% endif %}</p>
+                <p class="lead">Маркерная доска: {% if cab['has_marker_desk'] == true %} Есть {% else %} Нет {% endif %}</p>
+                <p class="lead">Размер: {% if cab['is_small'] == true %} Маленький {% else %} Большой {% endif %}</p>
+                <p class="lead">Кулер: {% if cab['near_to_water'] == true %} Рядом {% else %} Далеко {% endif %}</p>
+                <p class="lead">Лестница: {% if cab['stairs'] == "left" %} Слева {% elif cab['stairs'] == "front" %} Спереди {% elif cab['stairs'] == "back" %} Сзади {% elif cab['stairs'] == "right" %} Справа {% endif %}</p>
+            {% endif %}
+        </div>
+        {% if cab != 0 %}
+            <div class="col-lg-6">
+                <div class="card card-dark rounded-4 text-white">
+                    <div class="card-body p-4">
+                        <h2 style="text-align: center;">Бронирование {{cab['cabinet']}} кабинета</h2>
+                        <br>
+                        <form action="{{ url_for('make_book') }}" method="post">
+                            {% if err == 1 %}
+                                <p class="warning">Кабинет должен быть свободен и дата должна быть валидной</p>
+                            {% endif %}
+                            <input type="hidden" name="cab_num" value="{{ cab['cabinet'] }}">
+                            <div class="mb-4">
+                                <input type="date" min="{{today_date}}" max="{{week3_date}}" class="form-control form-control-lg" placeholder="Дата брони" id="date" name="date" required>
+                            </div>
+                            <div class="mb-4">
+                                <select class="form-control form-control-lg" id="cab_num" name="type" required>
+                                    <option value="" disabled selected>Тип мероприятия</option>
+                                    <option value="0">Урок</option>
+                                    <option value="1">Кружок</option>
+                                    <option value="2">Внеклассная деятельность</option>
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <label class="checkbox-container">1 урок
+                                        <input type="checkbox" name="1">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="checkbox-container">2 урок
+                                        <input type="checkbox" name="2">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="checkbox-container">3 урок
+                                        <input type="checkbox" name="3">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="checkbox-container">4 урок
+                                        <input type="checkbox" name="4">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="checkbox-container">5 урок
+                                        <input type="checkbox" name="5">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label class="checkbox-container">6 урок
+                                        <input type="checkbox" name="6">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="checkbox-container">7 урок
+                                        <input type="checkbox" name="7">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="checkbox-container">8 урок
+                                        <input type="checkbox" name="8">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="checkbox-container">9 урок
+                                        <input type="checkbox" name="9">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="checkbox-container">10 урок
+                                        <input type="checkbox" name="10">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button class="btn btn-purple w-100 mt-3" type="submit">Забронировать</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</main>
+
+<script>
+    // Валидация чекбоксов
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        const checkboxes = document.querySelectorAll('.checkbox-container input[type="checkbox"]');
+        const isChecked = Array.from(checkboxes).some(c => c.checked);
+        
+        if (!isChecked) {
+            e.preventDefault();
+            
+            // Удаляем предыдущие ошибки
+            const existingErrors = document.querySelectorAll('.checkbox-error');
+            existingErrors.forEach(error => error.remove());
+            
+            // Создаем сообщение об ошибке
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'checkbox-error';
+            errorDiv.innerHTML = `
+                <i class="bi bi-exclamation-circle"></i>
+                Пожалуйста, выберите минимум 1 урок!
+            `;
+            
+            // Вставляем сообщение перед кнопкой
+            const submitButton = this.querySelector('button[type="submit"]');
+            submitButton.parentNode.insertBefore(errorDiv, submitButton);
+            
+            // Анимация для чекбоксов
+            checkboxes.forEach(checkbox => {
+                checkbox.closest('.checkbox-container').classList.add('error-animation');
+                setTimeout(() => {
+                    checkbox.closest('.checkbox-container').classList.remove('error-animation');
+                }, 800);
+            });
+        }
+    });
+
+    // Удаление ошибки при выборе
+    document.querySelectorAll('.checkbox-container input').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            const error = document.querySelector('.checkbox-error');
+            if (error) error.remove();
+        });
+    });
+
+    // Оригинальные проверки (оставлены без изменений)
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const form = document.getElementById('registrationForm');
+    const passwordError = document.getElementById('passwordError');
+
+    confirmPassword.addEventListener('input', function() {
+        if (password.value !== confirmPassword.value) {
+            confirmPassword.classList.add('password-mismatch');
+            passwordError.style.display = 'block';
+        } else {
+            confirmPassword.classList.remove('password-mismatch');
+            passwordError.style.display = 'none';
+        }
+    });
+
+    const emailInput = form.querySelector('input[placeholder="Email"]');
+    emailInput.addEventListener('input', function() {
+        const emailPattern = /^[^\s@]+@(sch2\.ru)$/;
+        if (!emailPattern.test(emailInput.value)) {
+            emailInput.setCustomValidity("Введите корректный email");
+        } else {
+            emailInput.setCustomValidity("");
+        }
+    });
+
+    password.addEventListener('input', function() {
+        if (password.value.length < 8) {
+            password.setCustomValidity("Пароль должен содержать минимум 8 символов");
+        } else {
+            password.setCustomValidity("");
+        }
+    });
+
+    document.querySelectorAll('.form-section').forEach((el) => {
+        observer.observe(el);
+    });
+</script>
+{% endblock %}

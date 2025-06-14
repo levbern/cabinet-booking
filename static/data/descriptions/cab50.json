@@ -1,0 +1,11 @@
+{
+  "building": "old",
+  "floor": 5,
+  "is_computer_class": false,
+  "has_electronic_desk": false,
+  "has_projector": true,
+  "has_marker_desk": true,
+  "is_small": true,
+  "near_to_water": true,
+  "stairs": "left"
+}

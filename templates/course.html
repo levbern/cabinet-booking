@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block main_content %}
+<div class="container" style="margin-top: 120px; padding-bottom: 50px;">
+    <!-- Хедер курса -->
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <h1 class="display-4 mb-3">{{ course['name'] }}</h1>
+            <p class="lead text-grey">{{ course['description'] }}</p>
+        </div>
+        {% if creator %}
+        <div class="col-md-4 d-flex align-items-center justify-content-end gap-3">
+            <a href="/add_lecture/{{ course.id }}" class="btn btn-purple">📝 Лекция</a>
+            <a href="/add_test/{{ course.id }}" class="btn btn-purple">🎯 Задание</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Список материалов -->
+    <div class="row g-4">
+        {% for task in tasks %}
+        <div class="col-lg-4 col-md-6">
+            {% if task['type'] == 'lection' %}
+                <div class="course-card animated-card lecture-card">
+                    <div class="course-content">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="lecture-icon me-3">📖</div>
+                            <h5 class="mb-0">{{ task['name'] }}</h5>
+                        </div>
+                        <p class="text-grey">{{ task['description'] }}</p>
+                        <div class="mt-auto">
+                            <a href="/lecture/{{ task['id'] }}" class="btn btn-purple btn-courses w-100">Изучить →</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="course-card animated-card test-card">
+                    <div class="course-content">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="test-icon me-3">✍️</div>
+                            <h5 class="mb-0">{{ task['name'] }}</h5>
+                        </div>
+                        <p class="text-grey">{{ task['description'] }}</p>
+                        <div class="mt-auto">
+                            <a href="/course/{{ task['id'] }}" class="btn btn-purple btn-courses w-100">Изучить →</a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Блок статуса курса -->
+    <div class="row mt-5">
+        <div class="col-md-8 mx-auto">
+            {% if course['finished'] == 0 %}
+            <div class="course-status-card {{ 'creator-mode' if creator }}">
+                <div class="d-flex align-items-center justify-content-between p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="status-icon me-3">{{ '🚧' if not creator else '⚡' }}</div>
+                        <div>
+                            <h4 class="mb-1">{{ 'Курс в разработке' if not creator else 'Вы почти у цели!' }}</h4>
+                            <p class="mb-0 text-grey">{{ 'Материалы добавляются регулярно' if not creator else 'Завершите курс для публикации' }}</p>
+                        </div>
+                    </div>
+                    {% if creator %}
+                    <form action="/complete_course/{{ course.id }}" method="POST">
+                        <button type="submit" class="btn btn-purple px-4">Завершить</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<main class="form-section">
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <h1 class="display-3 mb-4">{{error}}</h1>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        gsap.from('.feature-card', {
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            stagger: 0.2,
+            ease: "power4.out"
+        });
+    });
+    window.addEventListener('scroll', function() {
+        const scrolled = window.pageYOffset;
+        if(document.querySelector('.platform-image')) {
+            document.querySelector('.platform-image').style.transform = 
+            `translateY(${scrolled * 0.15}px)`;
+        }
+    });
+</script>
+
+{% endblock %}

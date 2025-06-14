@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<div class="container profile-container">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="achievements-column">
+                {% for cab in cabs %}
+                    <div class="achievement-card">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <h4>Дата: {{ cab[0] }}<br>Кабинет: {{ cab[1] }}</h4>
+                            </div>
+                            <div class="col-lg-4 text-end">
+                                <!-- Кнопка для открытия модального окна -->
+                                <button 
+                                    class="btn-purple" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#detailsModal{{ loop.index }}"
+                                    style="border-radius: 10px;"
+                                >
+                                    Детали брони
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Модальное окно для деталей бронирования -->
+                    <div class="modal fade" id="detailsModal{{ loop.index }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content" style="background: var(--card-bg); border: 2px solid rgba(138,43,226,0.3);">
+                                <div class="modal-header" style="background: var(--purple-primary); border-bottom: 1px solid rgba(138,43,226,0.5);">
+                                    <h5 class="modal-title" style="color: var(--text-light);">Детали бронирования</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                                </div>
+                                <div class="modal-body" style="color: var(--text-light);">
+                                    <p><strong>Дата:</strong> {{ cab[0] }}</p>
+                                    <p><strong>Кабинет:</strong> {{ cab[1] }}</p>
+                                    <p><strong>Уроки:</strong>
+                                        {% for num in cab[2] %}
+                                            <span class="badge bg-purple" style="background: rgba(138,43,226,0.2); color: var(--purple-primary); border-radius: 12px; padding: 6px 12px; margin: 0 3px;">
+                                                {{ num }}
+                                            </span>
+                                        {% endfor %}
+                                    </p>
+                                    
+                                    <div class="mt-4">
+                                        <!-- Форма для переноса -->
+                                        <form action="{{ url_for('move_booking') }}" method="POST" class="mb-3">
+                                            <input type="hidden" name="booking_id" value="{{ cab[3] }}">
+                                            <input type="hidden" name="cab_num" value="{{ cab[1] }}">
+                                            <input type="hidden" name="lessons" value="{{ cab[2] | join(',') }}">
+                                            <input type="hidden" name="old_date" value="{{ cab[0] }}">
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label" style="color: var(--text-grey);">Новая дата бронирования:</label>
+                                                <input 
+                                                    type="date" 
+                                                    min="{{ today_date }}" 
+                                                    class="form-control find" 
+                                                    name="new_date" 
+                                                    required
+                                                    style="background: var(--input-bg); 
+                                                           border: 2px solid rgba(138,43,226,0.3); 
+                                                           color: var(--text-light);
+                                                           border-radius: 12px;
+                                                           padding: 12px 15px;">
+                                            </div>
+                                            
+                                            <button style="border-radius: 10px; margin-bottom: 5px;" class="btn-purple w-100" type="submit">
+                                                Перенести
+                                            </button>
+                                        </form>
+                                        
+                                        <!-- Форма для удаления -->
+                                        <form action="{{ url_for('delete_booking') }}" method="POST">
+                                            <input type="hidden" name="booking_id" value="{{ cab[3] }}">
+                                            <input type="hidden" name="cab_num" value="{{ cab[1] }}">
+                                            <input type="hidden" name="lessons" value="{{ cab[2] | join(',') }}">
+                                            <input type="hidden" name="date" value="{{ cab[0] }}">
+                                            
+                                            <button style="border-radius: 10px;" class="btn-red w-100" type="submit">
+                                                Удалить
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .modal-content {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    /* Стили для инпутов и кнопок в модальном окне */
+    .modal-body .form-control:focus {
+        border-color: var(--purple-primary) !important;
+        box-shadow: 0 0 0 4px rgba(138,43,226,0.25) !important;
+        outline: none !important;
+    }
+    
+    .btn-danger {
+        background: rgb(165, 32, 25);
+        border: none;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-danger:hover {
+        background: rgb(152, 31, 24);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(165, 32, 25, 0.3);
+    }
+    
+    .badge.bg-purple {
+        transition: all 0.3s ease;
+    }
+    
+    .badge.bg-purple:hover {
+        background: rgba(138,43,226,0.4) !important;
+        transform: scale(1.1);
+    }
+</style>
+{% endblock %}

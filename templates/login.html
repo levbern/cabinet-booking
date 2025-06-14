@@ -1,0 +1,56 @@
+{%extends "base.html" %}
+
+{%block main_content %}
+<main class="container my-5 pt-5">
+
+    <div class="row justify-content-center form-section">
+        <div class="col-lg-6 mb-5">
+            <h1 class="display-4 mb-4">С возвращением!</h1>
+            <p class="lead">Войдите в аккаунт, чтобы продолжить:</p>
+            <ul class="list-unstyled">
+                <li class="mb-3">🔐 Безопасный доступ</li>
+                <li class="mb-3">📦 История заказов</li>
+                <li class="mb-3">🎯 Персональные рекомендации</li>
+            </ul>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-dark rounded-4 text-white">
+                <div class="card-body p-4">
+                    <h2 style="text-align: center;">Вход в аккаунт</h2>
+                    <br>
+                    <form id="loginForm" method="post">
+                        <div class="mb-4">
+                            <input type="text" class="form-control form-control-lg" placeholder="Логин" id="username" name="username" required>
+                        </div>
+                        <div class="mb-4">
+                            <input type="password" class="form-control form-control-lg" placeholder="Пароль" id="password" name="password" required>
+                        </div>
+                        <button class="btn btn-purple w-100 mt-3" type="submit">Войти</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="/register">Нет аккаунта? Зарегистрироваться</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Парольная проверка
+    const password = document.getElementById('password');
+
+    // Проверка пароля
+    password.addEventListener('input', function() {
+        if (password.value.length < 8) {
+            password.setCustomValidity("Пароль должен содержать минимум 8 символов");
+        } else {
+            password.setCustomValidity("");
+        }
+    });
+
+    document.querySelectorAll('.form-section').forEach((el) => {
+        observer.observe(el);
+    });
+</script>
+{% endblock %}

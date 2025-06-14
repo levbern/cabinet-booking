@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<main class="container my-5 pt-5 form-section">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 mb-5">
+            <h1 class="display-4 mb-4">Добро пожаловать в Phantom</h1>
+            <p class="lead">Зарегистрируйтесь, чтобы получить доступ:</p>
+            <ul class="list-unstyled">
+                <li class="mb-3">🎁 Персональные скидки</li>
+                <li class="mb-3">🚀 Быстрый заказ</li>
+                <li class="mb-3">💎 Эксклюзивные предложения</li>
+            </ul>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-dark rounded-4 text-white">
+                <div class="card-body p-4">
+                    <h2 style="text-align: center;">Регистрация</h2>
+                    <br>
+                    <form id="registrationForm" method="post">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <input type="text" class="form-control form-control-lg" placeholder="Фамилия" id="surname" name="surname" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <input type="text" class="form-control form-control-lg" placeholder="Имя" id="name" name="name" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <input type="text" class="form-control form-control-lg" placeholder="Отчество" id="patronymic" name="patronymic">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <input type="text" class="form-control form-control-lg" placeholder="Логин" id="username" name="username" required>
+                        </div>
+                        <div class="mb-4">
+                            <input type="email" class="form-control form-control-lg" placeholder="Email" id="email" name="email" required>
+                        </div>
+                        <div class="mb-4">
+                            <input type="password" class="form-control form-control-lg" placeholder="Пароль" id="password" name="password" required>
+                        </div>
+                        <div class="mb-4">
+                            <input type="password" class="form-control form-control-lg" placeholder="Повторите пароль"  id="confirmPassword" name="confirmPassword" required>
+                            <div class="invalid-feedback" id="passwordError">Пароли не совпадают!</div>
+                        </div>
+                        <button class="btn btn-purple w-100 mt-3" type="submit">Создать аккаунт</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="/login">Уже есть аккаунт? Войти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Парольная проверка
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const form = document.getElementById('registrationForm');
+    const passwordError = document.getElementById('passwordError');
+
+    confirmPassword.addEventListener('input', function() {
+        if (password.value !== confirmPassword.value) {
+            confirmPassword.classList.add('password-mismatch');
+            passwordError.style.display = 'block';
+        } else {
+            confirmPassword.classList.remove('password-mismatch');
+            passwordError.style.display = 'none';
+        }
+    });
+
+    // Проверка email
+    const emailInput = form.querySelector('input[placeholder="Email"]');
+    emailInput.addEventListener('input', function() {
+        const emailPattern = /^[^\s@]+@([a-zA-Z0-9.-]+\.)*sch2\.ru$/i;
+        if (!emailPattern.test(emailInput.value)) {
+            emailInput.setCustomValidity("Введите корректный email");
+        } else {
+            emailInput.setCustomValidity("");
+        }
+    });
+
+    // Проверка пароля
+    password.addEventListener('input', function() {
+        if (password.value.length < 8) {
+            password.setCustomValidity("Пароль должен содержать минимум 8 символов");
+        } else {
+            password.setCustomValidity("");
+        }
+    });
+
+    document.querySelectorAll('.form-section').forEach((el) => {
+        observer.observe(el);
+    });
+</script>
+{% endblock %}

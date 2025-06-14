@@ -1,0 +1,41 @@
+{% extends "base.html"%}
+
+{%block main_content%}
+
+<div class="container" style="margin-top: 80px; padding-bottom: 80px; min-width: 85%;">
+    <h2 class="mb-4" style="color: var(--purple-primary);">Расписание всех кабинетов на неделю</h2>
+
+    {%for cab in all_cabinets%}
+        <h3>Кабинет {{cab['cabinet']}}<h3>
+        <div class="table-schedule-wrapper">
+            <table class="table-schedule">
+                <thead>
+                    <tr>
+                        <th class="day-header">День\Урок</th>
+                        {% for lesson in [0,1,2,3,4,5,6,7,8,9,10] %}
+                        <th class="lesson-header">Урок {{ lesson }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for day in ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'] %}
+                    <tr>
+                        <td class="day-cell">
+                            <div class="day-label">{{ day }}</div>
+                        </td>
+                        {% for lesson in cab[day] %}
+                            <td>
+                                <div class="lesson-slot">
+                                    <span class="subject-preview">{{lesson}}</span>
+                                </div>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {%endfor%}
+</div>
+{%endblock%}

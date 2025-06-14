@@ -1,0 +1,87 @@
+{% extends "base.html"%}
+
+{%block main_content%}
+
+<div class="container" style="margin-top: 80px; padding-bottom: 80px;  min-width: 85%;">
+    <h2 class="mb-4" style="color: var(--purple-primary);">Расписание кабинета на день</h2>
+    <form id="registrationForm" method="post">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="mb-4">
+                    <input type="date" min="{{today_date}}" class="form-control form-control-lg" placeholder="Дата брони" id="date" name="date" required>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-4">
+                    <select class="form-control form-control-lg" id="cab_num" name="cab_num" required>
+                        <option value="" disabled selected>Выберите кабинет</option>
+                        <option value="20">Кабинет 20</option>
+                        {% for num in range(22,32) %}
+                        <option value="{{ num }}">Кабинет {{ num }}</option>
+                        {% endfor %}
+                        {% for num in range(33,38) %}
+                        <option value="{{ num }}">Кабинет {{ num }}</option>
+                        {% endfor %}
+                        {% for num in range(40,42) %}
+                        <option value="{{ num }}">Кабинет {{ num }}</option>
+                        {% endfor %}
+                        {% for num in range(44,50) %}
+                        <option value="{{ num }}">Кабинет {{ num }}</option>
+                        {% endfor %}
+                        {% for num in range(50,55) %}
+                        <option value="{{ num }}">Кабинет {{ num }}</option>
+                        {% endfor %}
+                        {% for num in range(309,315) %}
+                        <option value="{{ num }}">Кабинет {{ num }}</option>
+                        {% endfor %}
+                        {% for num in range(410,412) %}
+                        <option value="{{ num }}">Кабинет {{ num }}</option>
+                        {% endfor %}
+                        {% for num in range(412,415) %}
+                        <option value="{{ num }}">Кабинет {{ num }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-4">
+                    <button style="border-radius: 10px;" class=" btn-purple w-100" type="submit">Выбрать</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    {%if cab != 0%}
+    <h3>Кабинет {{cab['cabinet']}}<h3>
+        <div class="table-schedule-wrapper">
+            <table class="table-schedule">
+                <thead>
+                    <tr>
+                        <th class="day-header">День\Урок</th>
+                        {% for lesson in [0,1,2,3,4,5,6,7,8,9,10] %}
+                        <th class="lesson-header">Урок {{ lesson }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td class="day-cell">
+                            <div class="day-label">{{day}}</div>
+                        </td>
+                        {% for lesson in cab[day] %}
+                            <td>
+                                <div class="lesson-slot">
+                                    <span class="subject-preview">{{lesson}}</span>
+                                </div>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    {%else%}
+        <h4>Выберите валидную дату(не воскресенье) и кабинет</h4>
+    {%endif%}
+</div>
+
+{%endblock%}
